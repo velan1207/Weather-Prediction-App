@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather Application</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" type="jpg" href="https://i.pinimg.com/736x/77/0b/80/770b805d5c99c7931366c2e84e88f251.jpg">
+</head>
+<body>
+<h1>Weather Information</h1>
+<form id="location-form">
+    <label for="location">Enter a city name (and optionally, a country code, separated by a comma):</label>
+    <input type="text" id="location" name="location" required>
+    <button type="submit">Get Weather</button>
+</form>
+<div id="weather-info"></div>
+<script>
+const weatherInfoDiv = document.getElementById('weather-info');
+const locationInput = document.getElementById('location');
+document.getElementById('location-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const location = locationInput.value;
+    const response = await fetch(`/weather?location=${encodeURIComponent(location)}`);
+    const weatherData = await response.json();
+    if (weatherData && !weatherData.error) {
+        weatherInfoDiv.innerHTML = `<p>City: ${weatherData.city}</p><p>Temperature: ${weatherData.temperature}</p><p>Weather: ${weatherData.description}</p>`;
+    } else {
+        weatherInfoDiv.innerHTML = `<p>${weatherData.error || 'An error occurred.'}</p>`;
+    }
+});
+</script>
+</body>
+</html>
